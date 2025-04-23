@@ -1,0 +1,40 @@
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:b_connect_task/core/router/routes.dart';
+
+import '../../features/chat/presentation/chat_home_page.dart';
+
+class AppRouter {
+  static const int fadeDuration = 400;
+
+  Route generateRoute(RouteSettings settings) {
+    switch (settings.name) {
+      case Routes.splash:
+        return _getFadeTransition(const ChatHomePage());
+      case Routes.login:
+        return _getFadeTransition(const ChatHomePage());
+      
+      // Add more routes as needed
+      
+      default:
+        return _getFadeTransition(const ChatHomePage()); // Default route
+    }
+  }
+
+  Route _getFadeTransition(Widget child) {
+    if (Platform.isIOS) {
+      return MaterialPageRoute(
+        builder: (_) => child,
+      );
+    } else {
+      return PageTransition(
+        child: child,
+        type: PageTransitionType.fade,
+        duration: const Duration(milliseconds: fadeDuration),
+      );
+    }
+  }
+}
