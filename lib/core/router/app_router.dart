@@ -6,6 +6,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:b_connect_task/core/router/routes.dart';
 
 import '../../features/chat/presentation/chat_home_page.dart';
+import '../../features/splash/presentation/splash_screen.dart';
 
 class AppRouter {
   static const int fadeDuration = 400;
@@ -13,7 +14,7 @@ class AppRouter {
   Route generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case Routes.splash:
-        return _getFadeTransition(const ChatHomePage());
+        return _getFadeTransition(const SplashScreen());
       case Routes.login:
         return _getFadeTransition(const ChatHomePage());
       
