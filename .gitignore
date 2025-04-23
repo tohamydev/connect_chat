@@ -70,3 +70,4 @@ pubspec.lock
 lib/chat_screen.dart
 lib/reminders.dart
 lib/feature/chat_screen.dart
+/.idea
