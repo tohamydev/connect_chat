@@ -41,6 +41,12 @@ dependencies:
   flutter_bloc: ^8.1.4
   equatable: ^2.0.5
   page_transition: ^2.1.0
+  location: ^5.0.3
+  url_launcher: ^6.2.4
+  place_picker_google: ^0.0.6
+  google_maps_flutter: ^2.5.0
+  cached_network_image: ^3.3.0
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_test:

@@ -5,6 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:b_connect_task/core/router/routes.dart';
 
+import '../../features/auth/presentation/login_screen.dart';
+import '../../features/auth/presentation/register_screen.dart';
 import '../../features/chat/presentation/chat_home_page.dart';
 import '../../features/splash/presentation/splash_screen.dart';
 
@@ -16,12 +18,16 @@ class AppRouter {
       case Routes.splash:
         return _getFadeTransition(const SplashScreen());
       case Routes.login:
+        return _getFadeTransition(const LoginScreen());
+      case Routes.signUp:
+        return _getFadeTransition(const RegisterScreen());
+      case Routes.home:
         return _getFadeTransition(const ChatHomePage());
       
       // Add more routes as needed
       
       default:
-        return _getFadeTransition(const ChatHomePage()); // Default route
+        return _getFadeTransition(const SplashScreen()); // Default route
     }
   }
 

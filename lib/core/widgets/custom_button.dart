@@ -5,9 +5,10 @@ class CustomButton extends StatelessWidget {
   final VoidCallback onPressed;
   final bool isLoading;
   final Color? backgroundColor;
-  final Color? textColor;
   final double? width;
   final double? height;
+  final double borderRadius;
+  final TextStyle? textStyle;
 
   const CustomButton({
     Key? key,
@@ -15,40 +16,36 @@ class CustomButton extends StatelessWidget {
     required this.onPressed,
     this.isLoading = false,
     this.backgroundColor,
-    this.textColor,
     this.width,
-    this.height,
+    this.height = 50,
+    this.borderRadius = 10,
+    this.textStyle,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: width ?? double.infinity,
-      height: height ?? 50,
+      height: height,
       child: ElevatedButton(
         onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: backgroundColor ?? Theme.of(context).primaryColor,
+          backgroundColor: backgroundColor,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(borderRadius),
           ),
         ),
         child: isLoading
-            ? const SizedBox(
-                width: 20,
-                height: 20,
-                child: CircularProgressIndicator(
-                  color: Colors.white,
-                  strokeWidth: 2,
-                ),
-              )
+            ? const CircularProgressIndicator(color: Colors.white)
             : Text(
                 text,
-                style: TextStyle(
-                  color: textColor ?? Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Cairo',
-                ),
+                style: textStyle ?? 
+                  const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontFamily: 'Cairo',
+                  ),
               ),
       ),
     );
