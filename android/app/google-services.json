@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "609105856433",
+    "project_id": "bconnect-ded53",
+    "storage_bucket": "bconnect-ded53.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:609105856433:android:a847497994c70aba8bdf90",
+        "android_client_info": {
+          "package_name": "com.bconnect.chat.b_connect_task"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVkHjalRry4kNDpd7oHaLzDdsvBonAOCc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
