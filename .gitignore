@@ -1,3 +1,54 @@
+# Flutter/Dart/Pub related
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+**/build/
+**/doc/api/
+**/ios/Flutter/.last_build_id
+
+# Obfuscation & Symbolication
+app.*.symbols
+app.*.map.json
+
+# Android
+/android/app/debug/
+/android/app/profile/
+/android/app/release/
+/android/app/.cxx/
+
+# iOS
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Generated.xcconfig
+ios/Flutter/Flutter.podspec
+ios/.dart_tool/
+
+# macOS
+macos/Flutter/GeneratedPluginRegistrant.swift
+macos/Flutter/ephemeral/
+
+# Windows
+windows/runner/GeneratedPluginRegistrant.*
+
+# Linux
+linux/flutter/ephemeral/
+
+# Web
+web/.*.js
+web/.*.map
+
+# Editor specific
+.idea/             # IntelliJ
+*.iml
+*.ipr
+*.iws
+
+.vscode/           # VS Code – comment out if you want to keep this tracked
+
 # Miscellaneous
 *.class
 *.log
@@ -5,41 +56,17 @@
 *.swp
 .DS_Store
 .atom/
-.build/
 .buildlog/
 .history
 .svn/
 .swiftpm/
 migrate_working_dir/
 
-# IntelliJ related
-*.iml
-*.ipr
-*.iws
-.idea/
+# Lock files – usually recommended to commit pubspec.lock in apps, not packages
+# Remove these lines if you want to commit lock files
+pubspec.lock
 
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/
-
-# Flutter/Dart/Pub related
-**/doc/api/
-**/ios/Flutter/.last_build_id
-.dart_tool/
-.flutter-plugins
-.flutter-plugins-dependencies
-.pub-cache/
-.pub/
-/build/
-
-# Symbolication related
-app.*.symbols
-
-# Obfuscation related
-app.*.map.json
-
-# Android Studio will place build artifacts here
-/android/app/debug
-/android/app/profile
-/android/app/release
+# Project-specific Dart files (if generated)
+lib/chat_screen.dart
+lib/reminders.dart
+lib/feature/chat_screen.dart
