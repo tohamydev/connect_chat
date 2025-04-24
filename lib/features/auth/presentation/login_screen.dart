@@ -7,6 +7,7 @@ import 'package:b_connect_task/core/components/custom_button.dart';
 import 'package:b_connect_task/core/components/custom_error_widget.dart';
 import 'package:b_connect_task/core/components/custom_password_field.dart';
 import 'package:b_connect_task/core/components/custom_text_field.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -83,30 +84,31 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
+          padding: EdgeInsets.all(24.w),
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const SizedBox(height: 40),
-                const AppLogo(height: 120, width: 120),
-                const SizedBox(height: 40),
+                SizedBox(height: 40.h),
+                AppLogo(height: 120.h, width: 120.w),
+                SizedBox(height: 40.h),
                 Text(
                   'تسجيل الدخول',
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                     color: AppColors.main,
                     fontFamily: 'Cairo',
+                    fontSize: 19.sp,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 30),
+                SizedBox(height: 30.h),
                 CustomTextField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   labelText: 'البريد الإلكتروني',
                   hintText: 'أدخل البريد الإلكتروني',
-                  prefixIcon: const Icon(Icons.email),
+                  prefixIcon: Icon(Icons.email, size: 20.w),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'الرجاء إدخال البريد الإلكتروني';
@@ -117,45 +119,46 @@ class _LoginScreenState extends State<LoginScreen> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20.h),
                 CustomPasswordField(
                   controller: _passwordController,
                   labelText: 'كلمة المرور',
                   hintText: 'أدخل كلمة المرور',
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: 10.h),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: TextButton(
                     onPressed: () {
                       // Navigate to forgot password screen
                     },
-                    child: const Text(
+                    child: Text(
                       'نسيت كلمة المرور؟',
                       style: TextStyle(
                         fontFamily: 'Cairo',
+                        fontSize: 14.sp,
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: 10.h),
                 if (_errorMessage != null)
                   CustomErrorWidget(errorMessage: _errorMessage!),
-                const SizedBox(height: 20),
+                SizedBox(height: 20.h),
                 CustomButton(
                   text: 'تسجيل الدخول',
                   onPressed: _login,
                   isLoading: _isLoading,
                   backgroundColor: AppColors.main,
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
+                    Text(
                       'ليس لديك حساب؟',
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 14.sp,
                         fontFamily: 'Cairo',
                       ),
                     ),
@@ -166,7 +169,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Text(
                         'إنشاء حساب',
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 14.sp,
                           fontWeight: FontWeight.bold,
                           color: AppColors.main,
                           fontFamily: 'Cairo',

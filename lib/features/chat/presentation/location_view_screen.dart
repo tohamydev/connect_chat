@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:b_connect_task/core/constants/app_colors.dart';
 import 'dart:ui';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LocationViewScreen extends StatelessWidget {
   final double latitude;
@@ -29,7 +30,7 @@ class LocationViewScreen extends StatelessWidget {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(kToolbarHeight),
+        preferredSize: Size.fromHeight(kToolbarHeight),
         child: ClipRRect(
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
@@ -40,7 +41,7 @@ class LocationViewScreen extends StatelessWidget {
                 'عرض الموقع',
                 style: TextStyle(
                   fontFamily: 'Cairo',
-                  fontSize: 18,
+                  fontSize: 18.sp,
                   color: AppColors.main,
                   fontWeight: FontWeight.bold,
                 ),
@@ -49,6 +50,7 @@ class LocationViewScreen extends StatelessWidget {
                 icon: Icon(
                   Icons.arrow_back_ios,
                   color: AppColors.main,
+                  size: 24.w,
                 ),
                 onPressed: () => Navigator.pop(context),
               ),
@@ -75,14 +77,14 @@ class LocationViewScreen extends StatelessWidget {
             ),
           ),
           Positioned(
-            bottom: 16,
-            left: 16,
-            right: 16,
+            bottom: 16.h,
+            left: 16.w,
+            right: 16.w,
             child: Container(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16.w),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12.r),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.1),
@@ -95,20 +97,20 @@ class LocationViewScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text(
+                  Text(
                     'العنوان',
                     style: TextStyle(
                       fontFamily: 'Cairo',
-                      fontSize: 14,
+                      fontSize: 14.sp,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8.h),
                   Text(
                     address,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Cairo',
-                      fontSize: 16,
+                      fontSize: 16.sp,
                     ),
                   ),
                 ],

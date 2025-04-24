@@ -15,6 +15,8 @@ import 'package:b_connect_task/features/chat/presentation/cubit/chat_cubit.dart'
 import 'package:b_connect_task/features/chat/presentation/cubit/chat_state.dart';
 import 'package:b_connect_task/features/chat/presentation/location_view_screen.dart';
 import 'package:place_picker_google/place_picker_google.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ChatDetailPage extends StatefulWidget {
   final String userName;
@@ -51,56 +53,98 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     });
   }
 
-  Future<void> _openLocationPicker() async {
-    final result = await  Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) {
-          return PlacePicker(
-            apiKey: Platform.isAndroid
-                ? "AIzaSyDGzG6SU9IVPzw2T6YTAH6YAgnAfzM1lsU"
-                : "AIzaSyDGzG6SU9IVPzw2T6YTAH6YAgnAfzM1lsU",
-            onPlacePicked: (LocationResult result) {
-              setState(() {
-                final LatLng position = LatLng(
-                  result.latLng!.latitude,
-                  result.latLng!.longitude,
-                );
-                final String address = result.formattedAddress ?? '';
-                context.read<ChatCubit>().sendSelectedLocationWithAddress(position, address);
-              });
-              Navigator.of(context).pop();
-            },
-            initialLocation: const LatLng(
-              29.378586,
-              47.990341,
-            ),
-            usePinPointingSearch: true,
-            searchInputConfig: const SearchInputConfig(
-              padding: EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 8.0,
-              ),
-              autofocus: false,
-              textDirection: TextDirection.ltr,
-            ),
-            searchInputDecorationConfig:
-            const SearchInputDecorationConfig(
-              hintText: "ابحث عن مكان .....",
-            ),
-          );
-        },
-      ),
-    );
-    ;
+  Future<Position?> _getCurrentLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
 
-    if (result != null && result is Map<String, dynamic>) {
-      final LatLng? position = result['position'] as LatLng?;
-      final String address = result['address'] as String? ?? '';
-      
-      if (position != null) {
-        context.read<ChatCubit>().sendSelectedLocationWithAddress(position, address);
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('خدمات الموقع غير مفعلة');
+    }
+
+    // التحقق من أذونات الموقع
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('تم رفض أذونات الموقع');
       }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+        'أذونات الموقع مرفوضة بشكل دائم، لا يمكننا طلب الأذونات',
+      );
+    }
+
+    return await Geolocator.getCurrentPosition();
+  }
+
+  Future<void> _openLocationPicker() async {
+    try {
+      final Position? currentPosition = await _getCurrentLocation();
+      
+      if (currentPosition != null) {
+        final result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return PlacePicker(
+                apiKey: Platform.isAndroid
+                    ? "AIzaSyDGzG6SU9IVPzw2T6YTAH6YAgnAfzM1lsU"
+                    : "AIzaSyDGzG6SU9IVPzw2T6YTAH6YAgnAfzM1lsU",
+                onPlacePicked: (LocationResult result) {
+                  setState(() {
+                    final LatLng position = LatLng(
+                      result.latLng!.latitude,
+                      result.latLng!.longitude,
+                    );
+                    final String address = result.formattedAddress ?? '';
+                    context.read<ChatCubit>().sendSelectedLocationWithAddress(position, address);
+                  });
+                  Navigator.of(context).pop();
+                },
+                initialLocation: LatLng(
+                  currentPosition.latitude,
+                  currentPosition.longitude,
+                ),
+                usePinPointingSearch: true,
+                searchInputConfig: const SearchInputConfig(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                    vertical: 8.0,
+                  ),
+                  autofocus: false,
+                  textDirection: TextDirection.ltr,
+                ),
+                searchInputDecorationConfig:
+                const SearchInputDecorationConfig(
+                  hintText: "ابحث عن مكان .....",
+                ),
+              );
+            },
+          ),
+        );
+
+        if (result != null && result is Map<String, dynamic>) {
+          final LatLng? position = result['position'] as LatLng?;
+          final String address = result['address'] as String? ?? '';
+          
+          if (position != null) {
+            context.read<ChatCubit>().sendSelectedLocationWithAddress(position, address);
+          }
+        }
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'حدث خطأ في الحصول على الموقع: ${e.toString()}',
+            style: const TextStyle(fontFamily: 'Cairo'),
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 
@@ -109,7 +153,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: PreferredSize(
-        preferredSize:  Size.fromHeight(kToolbarHeight),
+        preferredSize: Size.fromHeight(kToolbarHeight),
         child: ClipRRect(
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
@@ -117,40 +161,40 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
               backgroundColor: Colors.white.withOpacity(0.2),
               elevation: 0,
               leading: IconButton(
-                icon:  Icon(
+                icon: Icon(
                   CupertinoIcons.back,
                   color: AppColors.main,
+                  size: 24.w,
                 ),
                 onPressed: () => Navigator.pop(context),
               ),
               title: Row(
                 children: [
                   CircleAvatar(
-                    radius: 20,
+                    radius: 20.r,
                     backgroundColor: AppColors.main,
                     child: Text(
                       widget.userName.isNotEmpty ? widget.userName[0].toUpperCase() : '?',
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Colors.white,
-                        fontSize: 18,
+                        fontSize: 18.sp,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Cairo',
                       ),
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12.w),
                   Text(
                     widget.userName,
-                    style:  TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Cairo',
-                      fontSize: 18,
+                      fontSize: 18.sp,
                       color: AppColors.main,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],
               ),
-          
             ),
           ),
         ),
@@ -184,7 +228,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                           'لا توجد رسائل بعد. أرسل أول رسالة!',
                           style: TextStyle(
                             color: Colors.grey[600],
-                            fontSize: 16,
+                            fontSize: 16.sp,
                             fontFamily: 'Cairo',
                           ),
                         ),
@@ -194,7 +238,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                     return ListView.builder(
                       controller: _scrollController,
                       reverse: true,
-                      padding: const EdgeInsets.only(top: 15, bottom: 10),
+                      padding: EdgeInsets.only(top: 15.h, bottom: 10.h),
                       itemCount: state.messages!.length,
                       itemBuilder: (context, index) {
                         final message = state.messages![index];
@@ -246,7 +290,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 
   Widget _buildIOSStyleMessageComposer() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border(
@@ -258,54 +302,53 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
       ),
       child: Row(
         children: [
-          // زر خريطة جوجل
           Material(
             color: Colors.transparent,
             child: IconButton(
               icon: Icon(
                 CupertinoIcons.location,
                 color: AppColors.main,
-                size: 26,
+                size: 26.w,
               ),
               onPressed: _openLocationPicker,
-              splashRadius: 20,
+              splashRadius: 20.r,
               tooltip: 'إرسال موقع من الخريطة',
             ),
           ),
-          // حقل إدخال الرسائل
           Expanded(
             child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 4.0),
+              margin: EdgeInsets.symmetric(horizontal: 4.w),
               decoration: BoxDecoration(
                 color: Colors.grey.shade100,
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(20.r),
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 10.0),
+                      padding: EdgeInsets.only(left: 10.w),
                       child: TextField(
                         controller: _messageController,
                         textDirection: TextDirection.rtl,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           hintText: 'رسالة...',
                           hintStyle: TextStyle(
                             fontFamily: 'Cairo',
                             color: Colors.grey,
+                            fontSize: 14.sp,
                           ),
                           focusedBorder: InputBorder.none,
                           enabledBorder: InputBorder.none,
                           border: InputBorder.none,
                           contentPadding: EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 10,
+                            horizontal: 12.w,
+                            vertical: 10.h,
                           ),
                         ),
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Cairo',
-                          fontSize: 16,
+                          fontSize: 16.sp,
                         ),
                         maxLines: 5,
                         minLines: 1,
@@ -319,21 +362,20 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                       ),
                     ),
                   ),
-                  // زر الإرسال
                   AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
-                    margin: const EdgeInsets.only(right: 4, bottom: 4),
+                    margin: EdgeInsets.only(right: 4.w, bottom: 4.h),
                     child: Material(
                       color: Colors.transparent,
                       child: InkWell(
                         onTap: _isComposing ? _sendMessage : null,
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(20.r),
                         child: Padding(
-                          padding: const EdgeInsets.all(8),
+                          padding: EdgeInsets.all(8.w),
                           child: Icon(
                             CupertinoIcons.arrow_up_circle_fill,
                             color: _isComposing ? AppColors.main : Colors.grey,
-                            size: 28,
+                            size: 28.w,
                           ),
                         ),
                       ),

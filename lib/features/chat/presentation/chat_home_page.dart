@@ -6,6 +6,7 @@ import 'package:b_connect_task/core/components/custom_user_item.dart';
 import 'package:b_connect_task/features/chat/presentation/cubit/chat_cubit.dart';
 import 'package:b_connect_task/features/chat/presentation/cubit/chat_state.dart';
 import 'package:b_connect_task/features/chat/presentation/chat_detail_page.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ChatHomePage extends StatefulWidget {
   const ChatHomePage({Key? key}) : super(key: key);
@@ -48,7 +49,7 @@ class _ChatHomePageState extends State<ChatHomePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(kToolbarHeight),
+        preferredSize: Size.fromHeight(kToolbarHeight),
         child: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -65,12 +66,12 @@ class _ChatHomePageState extends State<ChatHomePage> {
           child: AppBar(
             backgroundColor: Colors.transparent,
             elevation: 0,
-            title: const Text(
+            title: Text(
               'المحادثات',
               style: TextStyle(
                 fontFamily: 'Cairo',
                 color: Colors.white,
-                fontSize: 18,
+                fontSize: 18.sp,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -97,9 +98,10 @@ class _ChatHomePageState extends State<ChatHomePage> {
                   return Center(
                     child: Text(
                       state.errorMessage ?? 'حدث خطأ',
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Colors.red,
                         fontFamily: 'Cairo',
+                        fontSize: 14.sp,
                       ),
                     ),
                   );
@@ -112,15 +114,15 @@ class _ChatHomePageState extends State<ChatHomePage> {
                       children: [
                         Icon(
                           Icons.people,
-                          size: 80,
+                          size: 80.w,
                           color: Colors.grey[400],
                         ),
-                        const SizedBox(height: 20),
+                        SizedBox(height: 20.h),
                         Text(
                           'لا يوجد مستخدمين',
                           style: TextStyle(
                             color: Colors.grey[600],
-                            fontSize: 18,
+                            fontSize: 18.sp,
                             fontFamily: 'Cairo',
                           ),
                         ),
@@ -148,14 +150,6 @@ class _ChatHomePageState extends State<ChatHomePage> {
             ),
           ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _searchController.clear();
-          context.read<ChatCubit>().loadUsers();
-        },
-        backgroundColor: AppColors.main,
-        child: const Icon(Icons.message),
       ),
     );
   }

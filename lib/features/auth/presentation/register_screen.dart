@@ -8,6 +8,7 @@ import 'package:b_connect_task/core/components/custom_button.dart';
 import 'package:b_connect_task/core/components/custom_error_widget.dart';
 import 'package:b_connect_task/core/components/custom_password_field.dart';
 import 'package:b_connect_task/core/components/custom_text_field.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -108,36 +109,37 @@ class _RegisterScreenState extends State<RegisterScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: Icon(Icons.arrow_back, color: Colors.black, size: 24.w),
           onPressed: () => Navigator.pop(context),
         ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
+          padding: EdgeInsets.all(24.w),
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const SizedBox(height: 20),
-                const AppLogo(height: 100, width: 100),
-                const SizedBox(height: 20),
+                SizedBox(height: 20.h),
+                AppLogo(height: 100.h, width: 100.w),
+                SizedBox(height: 20.h),
                 Text(
                   'إنشاء حساب جديد',
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                     color: AppColors.main,
                     fontFamily: 'Cairo',
+                    fontSize: 19.sp,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 30),
+                SizedBox(height: 30.h),
                 CustomTextField(
                   controller: _nameController,
                   textInputAction: TextInputAction.next,
                   labelText: 'الاسم الكامل',
                   hintText: 'أدخل اسمك الكامل',
-                  prefixIcon: const Icon(Icons.person),
+                  prefixIcon: Icon(Icons.person, size: 20.w),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'الرجاء إدخال الاسم';
@@ -145,7 +147,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20.h),
                 CustomTextField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
@@ -153,7 +155,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   textInputAction: TextInputAction.next,
                   labelText: 'البريد الإلكتروني',
                   hintText: 'أدخل البريد الإلكتروني',
-                  prefixIcon: const Icon(Icons.email),
+                  prefixIcon: Icon(Icons.email, size: 20.w),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'الرجاء إدخال البريد الإلكتروني';
@@ -164,7 +166,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20.h),
                 CustomTextField(
                   controller: _phoneController,
                   keyboardType: TextInputType.phone,
@@ -172,7 +174,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   textInputAction: TextInputAction.next,
                   labelText: 'رقم الهاتف',
                   hintText: 'أدخل رقم الهاتف',
-                  prefixIcon: const Icon(Icons.phone),
+                  prefixIcon: Icon(Icons.phone, size: 20.w),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'الرجاء إدخال رقم الهاتف';
@@ -183,7 +185,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20.h),
                 CustomPasswordField(
                   controller: _passwordController,
                   textInputAction: TextInputAction.next,
@@ -199,7 +201,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20.h),
                 CustomPasswordField(
                   controller: _confirmPasswordController,
                   labelText: 'تأكيد كلمة المرور',
@@ -214,24 +216,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20.h),
                 if (_errorMessage != null)
                   CustomErrorWidget(errorMessage: _errorMessage!),
-                const SizedBox(height: 20),
+                SizedBox(height: 20.h),
                 CustomButton(
                   text: 'إنشاء حساب',
                   onPressed: _register,
                   isLoading: _isLoading,
                   backgroundColor: AppColors.main,
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
+                    Text(
                       'لديك حساب بالفعل؟',
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 14.sp,
                         fontFamily: 'Cairo',
                       ),
                     ),
@@ -242,7 +244,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       child: Text(
                         'تسجيل الدخول',
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 14.sp,
                           fontWeight: FontWeight.bold,
                           color: AppColors.main,
                           fontFamily: 'Cairo',
